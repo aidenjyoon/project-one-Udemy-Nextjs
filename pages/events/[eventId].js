@@ -1,6 +1,6 @@
 import Head from "next/head";
 
-const EventPage = () => {
+const EventDetailPage = () => {
   return (
     <div>
       <h1>The Selected Event Page </h1>
@@ -8,4 +8,4 @@ const EventPage = () => {
   );
 };
 
-export default EventPage;
+export default EventDetailPage;
