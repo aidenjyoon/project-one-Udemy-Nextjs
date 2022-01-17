@@ -3,7 +3,8 @@ import styles from "./EventList.module.scss";
 
 const EventList = (props) => {
   const { items } = props;
-
+  console.log("TYHISDFA");
+  console.log(items);
   return (
     <ul className={styles.list}>
       {items.map((event) => (
