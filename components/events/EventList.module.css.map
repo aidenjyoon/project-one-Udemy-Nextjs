@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,KAAK,CAAC;EACJ,KAAK,EAAE,GAAG;EACV,SAAS,EAAE,KAAK;EAChB,MAAM,EAAE,SAAS;CAClB",
+    "sources": [
+        "EventList.module.scss"
+    ],
+    "names": [],
+    "file": "EventList.module.css"
+}
