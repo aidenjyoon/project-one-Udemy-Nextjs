@@ -7,20 +7,6 @@ import Button from "../../components/ui/button";
 import ErrorAlert from "../../components/ui/ErrorAlert";
 
 const FilteredEventPage = (props) => {
-  const router = useRouter();
-  const filterData = router.query.slug;
-
-  // for when site is first loaded and we don't have the url data yet.
-  if (!filterData) {
-    return <p className="center">Loading...</p>;
-  }
-
-  // loaded second time with url data
-  const filteredYear = filterData[0];
-  const filteredMonth = filterData[1];
-  const numYear = +filteredYear;
-  const numMonth = +filteredMonth;
-
   if (props.hasError) {
     return (
       <>
@@ -48,7 +34,7 @@ const FilteredEventPage = (props) => {
     );
   }
 
-  const date = new Date(numYear, numMonth - 1);
+  const date = new Date(props.numYear, props.numMonth);
 
   return (
     <>
@@ -100,7 +86,11 @@ const getServerSideProps = async (context) => {
     };
   }
   return {
-    props: { filteredEvents: filteredEvents },
+    props: {
+      filteredEvents: filteredEvents,
+      numYear: numYear,
+      numMonth: numMonth - 1,
+    },
   };
 };
 
