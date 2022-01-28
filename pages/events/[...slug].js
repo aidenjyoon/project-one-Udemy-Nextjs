@@ -7,9 +7,20 @@ import Button from "../../components/ui/button";
 import ErrorAlert from "../../components/ui/ErrorAlert";
 
 const FilteredEventPage = (props) => {
+  const pageHeader = (
+    <Head>
+      <title>Filtered Event</title>
+      <meta
+        name="description"
+        content={`All events for ${props.numMonth}/${props.numYear}`}
+      />
+    </Head>
+  );
+
   if (props.hasError) {
     return (
       <>
+        {pageHeader}
         <ErrorAlert>
           <p>Invalid filter. Please check your values.</p>
         </ErrorAlert>
@@ -23,6 +34,7 @@ const FilteredEventPage = (props) => {
   if (props.hasEvent === false) {
     return (
       <>
+        {pageHeader}
         <ErrorAlert>
           <p>No Events were found for the chosen filter!</p>
         </ErrorAlert>
