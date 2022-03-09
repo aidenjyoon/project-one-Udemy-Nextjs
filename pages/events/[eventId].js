@@ -1,16 +1,16 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { getAllEvents, getFeaturedEvents } from "../../api/utils";
+import { getAllEvents, getFeaturedEvents } from "../../helpers/api-utils";
 import EventSummary from "../../components/event-detail/EventSummary";
 import EventLogistics from "../../components/event-detail/EventLogistics";
 import EventContent from "../../components/event-detail/EventContent";
 import ErrorAlert from "../../components/ui/ErrorAlert";
 import Button from "../../components/ui/button";
+import Comments from "../../components/comments/Comments";
 
 const EventDetailPage = (props) => {
   const router = useRouter();
   const eventId = router.query.eventId;
-  // const event = getEventById(eventId);
   const event = props.selectedEvent;
 
   if (!event) {
@@ -39,6 +39,8 @@ const EventDetailPage = (props) => {
       <EventContent>
         <p>{event.description}</p>
       </EventContent>
+
+      <Comments eventId={eventId} />
     </>
   );
 };

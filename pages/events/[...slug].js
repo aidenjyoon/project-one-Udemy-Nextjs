@@ -1,6 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { getFilteredEvents } from "../../api/utils";
+import { getFilteredEvents } from "../../helpers/api-utils";
 import EventList from "../../components/events/EventList";
 import ResultsTitle from "../../components/events/ResultsTitle";
 import Button from "../../components/ui/button";

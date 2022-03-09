@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  max-width: 40rem;
+  margin: 3rem auto;
+
+  .btn {
+    background-color: #03be9f;
+    border: 1px solid #03be9f;
+    border-radius: 6px;
+    color: #dafff7;
+    font: inherit;
+    cursor: pointer;
+    padding: 6px 10.5px;
+    max-width: 10rem;
+
+    &:hover,
+    &:active {
+      background-color: #02afa1;
+    }
+  }
+}

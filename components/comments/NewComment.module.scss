@@ -1,0 +1,42 @@
+.form {
+  margin: 2rem auto;
+  width: 100%;
+  border-radius: 6px;
+  background-color: #03be9f;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  padding: 1rem;
+
+  .row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .control {
+    flex: 1;
+    min-width: 10rem;
+
+    label {
+      display: block;
+      color: white;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-align: left;
+    }
+
+    input,
+    textarea {
+      font: inherit;
+      width: 100%;
+      padding: 0.25rem;
+      background-color: #dcfff9;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  button {
+    background-color: white;
+  }
+}
