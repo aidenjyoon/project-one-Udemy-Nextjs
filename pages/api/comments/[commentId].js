@@ -7,8 +7,14 @@ const handler = async (req, res) => {
   const dbName = "comments";
   const url = `mongodb://aiden:mpKZGI6SibJ2JSMy@cluster0-shard-00-00.4lj4l.mongodb.net:27017,cluster0-shard-00-01.4lj4l.mongodb.net:27017,cluster0-shard-00-02.4lj4l.mongodb.net:27017/${dbName}?ssl=true&replicaSet=atlas-q1n2xs-shard-0&authSource=admin&retryWrites=true&w=majority`;
 
-  const client = new MongoClient(url);
-  await client.connect();
+  let client;
+  try {
+    client = new MongoClient(url);
+    await client.connect();
+  } catch (error) {
+    res.status(500).json({ message: "Unable to connect to the database." });
+    return;
+  }
 
   const email = req.body.email;
   const name = req.body.name;
@@ -36,19 +42,20 @@ const handler = async (req, res) => {
       eventId,
     };
 
-    const db = client.db(dbName);
-
     try {
+      const db = client.db(dbName);
       const result = await db.collection("comments").insertOne(newComment);
       newComment._id = result.insertedId;
+
+      res.status(201).json({
+        message: "Added comment.",
+        comment: newComment,
+      });
     } catch (error) {
       res.status(500).json({ message: "Not able to add to database." });
     }
 
-    res.status(201).json({
-      message: "Added comment.",
-      comment: newComment,
-    });
+    client.close();
   } else {
     // req method get
     // spit out what i have
@@ -73,7 +80,6 @@ const handler = async (req, res) => {
       res
         .status(500)
         .json({ message: "Not able to get comment from databse." });
-      return;
     }
   }
 

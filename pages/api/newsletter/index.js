@@ -29,17 +29,16 @@ const handler = async (req, res) => {
     const db = client.db(dbName);
 
     await db.collection("emails").insertOne({ email: userEmail });
-    client.close();
+    res
+      .status(201)
+      .json({ email: userEmail, message: `${userEmail} was signed up!` });
   } catch (error) {
     res
       .status(500)
       .json("Email has not been successfully added to the database.");
-    return;
   }
 
-  res
-    .status(201)
-    .json({ email: userEmail, message: `${userEmail} was signed up!` });
+  client.close();
 };
 
 export default handler;
