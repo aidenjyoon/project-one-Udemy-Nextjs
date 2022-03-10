@@ -1,21 +1,18 @@
 import styles from "./CommentsList.module.scss";
 
-const CommentsList = () => {
+const CommentsList = (props) => {
   return (
     <ul className={styles.comments}>
-      {/* Render list of comments - fetched from API */}
-      <li>
-        <p>My comment is amazing!</p>
-        <div>
-          By <address>Maximilian</address>
-        </div>
-      </li>
-      <li>
-        <p>My comment is amazing!</p>
-        <div>
-          By <address>Maximilian</address>
-        </div>
-      </li>
+      {props.items.map((item) => {
+        return (
+          <li key={item.id}>
+            <p>{item.comment}</p>
+            <div>
+              By <address>{item.name}</address>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
 };
