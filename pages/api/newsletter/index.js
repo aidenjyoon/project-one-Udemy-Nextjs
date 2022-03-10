@@ -1,6 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const handler = (req, res) => {
+const handler = async (req, res) => {
   const userEmail = req.body.email;
 
   // validate email
@@ -17,29 +17,29 @@ const handler = (req, res) => {
 
   const client = new MongoClient(url);
 
-  async function run() {
-    try {
-      await client.connect();
-      console.log("Connected correctly to server");
-
-      const db = client.db(dbName);
-
-      await db.collection("emails").insertOne({ email: userEmail });
-
-      res.status(201).json({ message: "Signed up!" });
-    } catch (err) {
-      console.log("ERROR");
-      console.log(err.stack);
-      console.log("------");
-    } finally {
-      await client.close();
-    }
+  try {
+    await client.connect();
+    // console.log("Connected correctly to server");
+  } catch (err) {
+    res.status(500).json({ message: "Connecting to database has failed." });
+    return;
   }
-  run(); //.catch(console.dir);
+
+  try {
+    const db = client.db(dbName);
+
+    await db.collection("emails").insertOne({ email: userEmail });
+    client.close();
+  } catch (error) {
+    res
+      .status(500)
+      .json("Email has not been successfully added to the database.");
+    return;
+  }
 
   res
-    .status(200)
-    .json({ email: userEmail, message: `${userEmail} was received` });
+    .status(201)
+    .json({ email: userEmail, message: `${userEmail} was signed up!` });
 };
 
 export default handler;

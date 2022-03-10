@@ -38,26 +38,43 @@ const handler = async (req, res) => {
 
     const db = client.db(dbName);
 
-    const result = await db.collection("comments").insertOne(newComment);
-
-    newComment.id = result.insertedId;
+    try {
+      const result = await db.collection("comments").insertOne(newComment);
+      newComment._id = result.insertedId;
+    } catch (error) {
+      res.status(500).json({ message: "Not able to add to database." });
+    }
 
     res.status(201).json({
       message: "Added comment.",
       comment: newComment,
     });
   } else {
+    // req method get
     // spit out what i have
     // go to db and get all the comments
     // add the new comment at the end of the comments list
     // send them all back
-    const db = client.db();
-    const documents = await db
-      .collection("comments")
-      .find()
-      .sort({ _id: -1 })
-      .toArray();
-    res.status(200).json({ comments: documents });
+
+    try {
+      // getting the comemnts
+      const db = client.db();
+
+      // to fiiter by event
+      const filter = { eventId: eventId };
+
+      const documents = await db
+        .collection("comments")
+        .find(filter)
+        .sort({ _id: -1 })
+        .toArray();
+      res.status(200).json({ comments: documents });
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Not able to get comment from databse." });
+      return;
+    }
   }
 
   client.close();
