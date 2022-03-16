@@ -20,21 +20,27 @@ const Comments = (props) => {
           setComments(data.comments);
         });
     }
-  }, [showComments, eventId]);
+  }, [showComments, comments, eventId]);
 
   const toggleCommentsHandler = () => {
     setShowComments((prevStatus) => !prevStatus);
   };
 
+  // TODO:
+  // reload the comments after new comments are sent.
+  // i think i'd have to setShowComments again
+
   // add comment to db
   const addCommentHandler = (commentData) => {
     try {
+      // pending notification
       notificationCtx.showNotification({
         title: "Pending...",
         message: "Comment is being uploaded...",
         status: "pending",
       });
 
+      // fetch comments from db
       fetch("/api/comments/" + eventId, {
         method: "POST",
         body: JSON.stringify(commentData),
@@ -44,13 +50,22 @@ const Comments = (props) => {
       })
         .then((response) => response.json())
         .then((data) => {
+          // success notification
           notificationCtx.showNotification({
             title: "Success!",
             message: "Comment has been saved in the database.",
             status: "success",
           });
+
+          console.log(comments.length);
         });
-    } catch (error) {}
+    } catch (error) {
+      notificationCtx.showNotification({
+        title: "Error",
+        message: error.message || "Something is wrong.",
+        status: "error",
+      });
+    }
   };
 
   return (
