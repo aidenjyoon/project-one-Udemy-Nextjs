@@ -19,7 +19,7 @@ const handler = async (req, res) => {
 
   try {
     await client.connect();
-    // console.log("Connected correctly to server");
+    console.log("Connected correctly to server");
   } catch (err) {
     res.status(500).json({ message: "Connecting to database has failed." });
     return;
@@ -28,14 +28,16 @@ const handler = async (req, res) => {
   try {
     const db = client.db(dbName);
 
-    await db.collection("emails").insertOne({ email: userEmail });
+    const date = new Date().toUTCString();
+
+    await db
+      .collection("emails")
+      .insertOne({ email: userEmail, dateRegistered: date });
     res
       .status(201)
       .json({ email: userEmail, message: `${userEmail} was signed up!` });
   } catch (error) {
-    res
-      .status(500)
-      .json("Email has not been successfully added to the database.");
+    res.status(500).json("Email has not been added to the database.");
   }
 
   client.close();
