@@ -1,11 +1,13 @@
 import styles from "./CommentsList.module.scss";
 
 const CommentsList = (props) => {
+  const { items } = props;
+
   return (
     <ul className={styles.comments}>
-      {props.items.map((item) => {
+      {items.map((item) => {
         return (
-          <li key={item.id}>
+          <li key={item._id}>
             <p>{item.comment}</p>
             <div>
               By <address>{item.name}</address>
