@@ -9,21 +9,35 @@ const Comments = (props) => {
 
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
+  const [isFetchingComments, setIsFetchingComments] = useState(false);
   const notificationCtx = useContext(NotificationContext);
 
   // Gets comments from database
   useEffect(() => {
+    setIsFetchingComments(true);
+
     if (showComments) {
-      fetch("/api/comments/" + eventId)
-        .then((response) => response.json())
-        .then((data) => {
-          setComments(data.comments);
+      try {
+        fetch("/api/comments/" + eventId)
+          .then((response) => response.json())
+          .then((data) => {
+            setComments(data.comments);
+          });
+      } catch (error) {
+        notificationCtx.showNotification({
+          title: "Error",
+          message: "Problem getting the comments...",
+          status: "error",
         });
+      }
+      setIsFetchingComments(false);
     }
-  }, [showComments, comments, eventId]);
+  }, [notificationCtx, showComments, eventId]);
 
   const toggleCommentsHandler = () => {
-    setShowComments((prevStatus) => !prevStatus);
+    setShowComments((prevStatus) => {
+      return !prevStatus;
+    });
   };
 
   // TODO:
@@ -40,7 +54,7 @@ const Comments = (props) => {
         status: "pending",
       });
 
-      // fetch comments from db
+      // add comments to db
       fetch("/api/comments/" + eventId, {
         method: "POST",
         body: JSON.stringify(commentData),
@@ -50,14 +64,14 @@ const Comments = (props) => {
       })
         .then((response) => response.json())
         .then((data) => {
+          console.log(data);
+
           // success notification
           notificationCtx.showNotification({
             title: "Success!",
             message: "Comment has been saved in the database.",
             status: "success",
           });
-
-          console.log(comments.length);
         });
     } catch (error) {
       notificationCtx.showNotification({
@@ -75,7 +89,10 @@ const Comments = (props) => {
           {showComments ? "Hide" : "Show"} Comments
         </button>
         {showComments && <NewComment onAddComment={addCommentHandler} />}
-        {showComments && <CommentsList items={comments} />}
+        {showComments && !isFetchingComments && (
+          <CommentsList items={comments} />
+        )}
+        {showComments && isFetchingComments && <p>Loading...</p>}
       </div>
     </>
   );
